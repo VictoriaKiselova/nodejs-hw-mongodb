@@ -20,10 +20,11 @@ export default function setupServer() {
   app.use(logger);
 
   app.get('/contacts', async (req, res) => {
+    console.log(res);
     try {
       const contacts = await getAllContacts();
       const responseData = {
-        status: 'success',
+        status: 200,
         message: 'Successfully found contacts!',
         data: contacts,
       };
@@ -47,6 +48,7 @@ export default function setupServer() {
       return;
     }
     res.status(200).json({
+      status: 200,
       message: `Successfully found contact with id ${contactId}!`,
       data: contact,
     });
