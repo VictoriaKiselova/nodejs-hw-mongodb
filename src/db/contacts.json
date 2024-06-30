@@ -84,7 +84,7 @@
     "name": "Kateryna Kovalchuk",
     "phoneNumber": "+3800000000010",
     "email": null,
-    "isFavourite": false,
+    "isFavourite": true,
     "contactType": "personal",
     "createdAt": "2024-05-08T16:12:14.954208",
     "updatedAt": "2024-05-08T16:12:14.954211"
