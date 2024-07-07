@@ -43,8 +43,8 @@ export const getContactsController = async (req, res, next) => {
 
 export const getContactByIdController = async (req, res, next) => {
   const { _id: userId } = req.user;
-  const { id } = req.params;
-  const contact = await getContactByFilter({ _id: id, userId });
+  const { contactId } = req.params;
+  const contact = await getContactByFilter({ _id: contactId, userId });
 
   if (!contact) {
     next(
@@ -58,7 +58,7 @@ export const getContactByIdController = async (req, res, next) => {
 
   res.status(200).json({
     status: 200,
-    message: `Successfully found contact with id ${id}!`,
+    message: `Successfully found contact with id ${contactId}!`,
     data: contact,
   });
 };
@@ -66,7 +66,7 @@ export const getContactByIdController = async (req, res, next) => {
 export const createContactController = async (req, res) => {
   const { _id: userId } = req.user;
 
-  const contact = await createContact(...req.body, userId);
+  const contact = await createContact({ ...req.body, userId });
   res.status(201).json({
     status: 201,
     message: `Successfully created a contact!`,
@@ -75,9 +75,9 @@ export const createContactController = async (req, res) => {
 };
 
 export const updateContactController = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const { _id: userId } = req.user;
-  const result = await updateContact({ _id: id, userId }, req.body, {
+  const result = await updateContact({ _id: contactId, userId }, req.body, {
     upsert: true,
   });
 
@@ -99,9 +99,9 @@ export const updateContactController = async (req, res, next) => {
 };
 
 export const deleteContactController = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const { _id: userId } = req.user;
-  const result = await deleteContact({ _id: id, userId });
+  const result = await deleteContact({ _id: contactId, userId });
 
   if (!result) {
     next(
