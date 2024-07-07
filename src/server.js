@@ -1,11 +1,10 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import pino from 'pino-http';
-// import router from './routers/contacts.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-// import authRegisterRouter from './routers/auth.js';
 import router from './routers/index.js';
 
 dotenv.config();
@@ -18,17 +17,17 @@ export default function setupServer() {
       target: 'pino-pretty',
     },
   });
-  app.use(router);
+
   app.use(cors());
+  app.use(cookieParser());
   app.use(logger);
   app.use(
     express.json({
       type: ['application/json', 'application/vnd.api+json'],
     }),
   );
+  app.use(router);
 
-  // app.use('/auth/register',authRegisterRouter);
-  // app.use('/contacts', routers);
   app.use('*', notFoundHandler);
   app.use(errorHandler);
 

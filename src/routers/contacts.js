@@ -7,14 +7,16 @@ import {
   deleteContactController,
 } from '../controllers/contacts.js';
 import validateBody from '../middlewares/validatebody.js';
+import authenticate from '../middlewares/authenticate.js';
 import {
   createContactSchema,
   updateContactSchema,
 } from '../validation/contact-schemas.js';
-import {ctrlWrapper} from '../utils/ctrlWrapper.js';
-
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
