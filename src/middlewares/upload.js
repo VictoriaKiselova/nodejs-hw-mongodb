@@ -15,7 +15,7 @@ const fileFilter = (req, file, callback) => {
   if (!file) {
     return callback(createHttpError(400, 'No file provided'));
   }
-  const extension = req.file.originalname.split('.').pop();
+  const extension = file.originalname.split('.').pop();
   if (extension === 'exe') {
     return callback(createHttpError(400, '.exe file not allow'));
   }

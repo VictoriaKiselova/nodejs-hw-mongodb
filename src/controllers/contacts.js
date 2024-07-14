@@ -71,6 +71,7 @@ export const getContactByIdController = async (req, res, next) => {
 export const createContactController = async (req, res) => {
   const { _id: userId } = req.user;
   let photo = '';
+
   if (req.file) {
     if (enable_cloudinary === 'true') {
       photo = await saveFileToCloudinary(req.file, 'photo');
@@ -90,18 +91,21 @@ export const createContactController = async (req, res) => {
 export const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id: userId } = req.user;
-  const photo = req.file;
-  let photoUrl;
+  let photo = '';
 
-  if (photo) {
-    photoUrl = await saveFileToCloudinary(photo);
+  if (req.file) {
+    if (enable_cloudinary === 'true') {
+      photo = await saveFileToCloudinary(req.file, 'photo');
+    } else {
+      photo = await saveFileToPublicDir(req.file, 'photos');
+    }
   }
 
   const result = await updateContact(
     { _id: contactId, userId },
     {
       ...req.body,
-      photo: photoUrl,
+      photo: photo,
     },
     {
       upsert: true,

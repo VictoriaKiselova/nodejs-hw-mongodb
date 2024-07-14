@@ -13,7 +13,7 @@ import {
   updateContactSchema,
 } from '../validation/contact-schemas.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import  upload  from '../middlewares/upload.js';
+import upload from '../middlewares/upload.js';
 
 const router = Router();
 

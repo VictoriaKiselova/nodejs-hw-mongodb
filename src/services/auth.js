@@ -7,8 +7,6 @@ import {
   THIRTY_DAYS,
   TEMPLATES_DIR,
 } from '../constants/index.js';
-import jwt from 'jsonwebtoken';
-import 'dotenv/config';
 import { SMTP } from '../constants/index.js';
 import { env } from '../utils/env.js';
 import { sendEmail } from '../utils/sendMail.js';
@@ -17,6 +15,8 @@ import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 export const registerUser = async (payload) => {
   const { password } = payload;

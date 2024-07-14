@@ -1,6 +1,6 @@
+import { PUBLIC_DIR } from '../constants/index.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { PUBLIC_DIR } from '../constants/index.js';
 import { env } from './env.js';
 
 const domian = env('APP_DOMAIN');
