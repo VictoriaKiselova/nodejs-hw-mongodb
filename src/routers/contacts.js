@@ -6,6 +6,11 @@ import {
   updateContactController,
   deleteContactController,
 } from '../controllers/contacts.js';
+import validateBody from '../middlewares/validatebody.js';
+import {
+  createContactSchema,
+  updateContactSchema,
+} from '../validation/contact-schemas.js';
 
 export const ctrlWrapper = (controller) => {
   const funcNextError = async (req, res, next) => {
@@ -24,9 +29,17 @@ router.get('/', ctrlWrapper(getContactsController));
 
 router.get('/:contactId', ctrlWrapper(getContactByIdController));
 
-router.post('/', ctrlWrapper(createContactController));
+router.post(
+  '/',
+  validateBody(createContactSchema),
+  ctrlWrapper(createContactController),
+);
 
-router.patch('/:contactId', ctrlWrapper(updateContactController));
+router.patch(
+  '/:contactId',
+  validateBody(updateContactSchema),
+  ctrlWrapper(updateContactController),
+);
 
 router.delete('/:contactId', ctrlWrapper(deleteContactController));
 
