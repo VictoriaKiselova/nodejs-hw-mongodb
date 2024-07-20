@@ -6,7 +6,9 @@ import {
   createSession,
   findSession,
   deleteSession,
+  requestResetToken,
 } from '../services/auth.js';
+import { resetPassword } from '../services/auth.js';
 
 const setupResponseSession = (
   res,
@@ -93,4 +95,29 @@ export const logoutController = async (req, res) => {
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
   res.status(204).send();
+};
+
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  try {
+    res.json({
+      status: 200,
+      message: 'Reset password email was successfully sent!',
+      data: {},
+    });
+  } catch {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    status: 200,
+    message: 'Password was successfully reset!',
+    data: {},
+  });
 };

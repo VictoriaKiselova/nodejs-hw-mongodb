@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import pino from 'pino-http';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { PUBLIC_DIR } from './constants/index.js';
 import router from './routers/index.js';
 
 dotenv.config();
@@ -26,6 +27,7 @@ export default function setupServer() {
       type: ['application/json', 'application/vnd.api+json'],
     }),
   );
+  app.use(express.static(PUBLIC_DIR));
   app.use(router);
 
   app.use('*', notFoundHandler);

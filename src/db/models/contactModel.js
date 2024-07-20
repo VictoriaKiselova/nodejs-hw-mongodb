@@ -19,8 +19,6 @@ const contactSchema = new Schema(
     email: {
       type: String,
       match: [validEmail, 'Please enter a valid email address'],
-      minlength: 3,
-      maxlength: 20,
     },
     isFavourite: {
       type: Boolean,
@@ -33,6 +31,9 @@ const contactSchema = new Schema(
       required: true,
       minlength: 3,
       maxlength: 20,
+    },
+    photo: {
+      type: String,
     },
     userId: {
       type: Schema.Types.ObjectId,
