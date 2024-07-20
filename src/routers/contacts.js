@@ -7,30 +7,23 @@ import {
   deleteContactController,
 } from '../controllers/contacts.js';
 import validateBody from '../middlewares/validatebody.js';
+import authenticate from '../middlewares/authenticate.js';
 import {
   createContactSchema,
   updateContactSchema,
 } from '../validation/contact-schemas.js';
-
-export const ctrlWrapper = (controller) => {
-  const funcNextError = async (req, res, next) => {
-    try {
-      await controller(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
-  return funcNextError;
-};
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
 router.get('/:contactId', ctrlWrapper(getContactByIdController));
 
 router.post(
-  '/',
+  '',
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );

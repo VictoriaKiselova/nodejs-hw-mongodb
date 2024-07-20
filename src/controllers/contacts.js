@@ -1,6 +1,6 @@
 import {
   getAllContacts,
-  getContactById,
+  getContactByFilter,
   createContact,
   updateContact,
   deleteContact,
@@ -11,9 +11,11 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getContactsController = async (req, res, next) => {
+  const { _id: userId } = req.user;
+
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
-  const filter = parseFilterParams(req.query);
+  const filter = { ...parseFilterParams(req.query), userId };
 
   const contacts = await getAllContacts({
     page,
@@ -40,8 +42,9 @@ export const getContactsController = async (req, res, next) => {
 };
 
 export const getContactByIdController = async (req, res, next) => {
+  const { _id: userId } = req.user;
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await getContactByFilter({ _id: contactId, userId });
 
   if (!contact) {
     next(
@@ -61,7 +64,9 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
+  const { _id: userId } = req.user;
+
+  const contact = await createContact({ ...req.body, userId });
   res.status(201).json({
     status: 201,
     message: `Successfully created a contact!`,
@@ -71,7 +76,8 @@ export const createContactController = async (req, res) => {
 
 export const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await updateContact({ _id: contactId }, req.body, {
+  const { _id: userId } = req.user;
+  const result = await updateContact({ _id: contactId, userId }, req.body, {
     upsert: true,
   });
 
@@ -94,7 +100,8 @@ export const updateContactController = async (req, res, next) => {
 
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await deleteContact(contactId);
+  const { _id: userId } = req.user;
+  const result = await deleteContact({ _id: contactId, userId });
 
   if (!result) {
     next(
