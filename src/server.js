@@ -6,6 +6,7 @@ import pino from 'pino-http';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { PUBLIC_DIR } from './constants/index.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import router from './routers/index.js';
 
 dotenv.config();
@@ -28,6 +29,7 @@ export default function setupServer() {
     }),
   );
   app.use(express.static(PUBLIC_DIR));
+  app.use('/api-docs', swaggerDocs());
   app.use(router);
 
   app.use('*', notFoundHandler);

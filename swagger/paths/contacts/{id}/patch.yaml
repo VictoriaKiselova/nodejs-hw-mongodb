@@ -1,0 +1,75 @@
+tags:
+  - Contacts
+summary: Change contact
+operationId: changeContact
+description: 'Change contact'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 65e4decdd286b30065d54af9
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - id
+        properties:
+          id:
+            description: "Contact's id"
+            type: string
+            example: 65e4decdd286b30065d54af9
+          name:
+            description: "Contact's name"
+            type: string
+            example: 'John Doe'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: "+380000000003"
+          email:
+            description: "Contact's email"
+            type: string
+            example: qwerty@gmail.com
+          isFavourite:
+            description: "Contact's favourite"
+            type: boolean
+            example: false
+          contactType:
+            description: 'Contact type'
+            type: string
+            enum: ['work', 'home', 'personal']
+          photo:
+            description: "Link to contact's photo"
+            type: string
+            example: "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+responses:
+  '201':
+    description: Сontact changed
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully changed a contact!
+            data:
+              type: object
+              $ref: '../../../components/schemas/contact.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+

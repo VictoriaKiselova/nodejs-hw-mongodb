@@ -9,6 +9,12 @@ import {
   requestResetToken,
 } from '../services/auth.js';
 import { resetPassword } from '../services/auth.js';
+import {
+  generateAuthUrl,
+  validateGoogleAuthCode,
+  getGoogleAuthName,
+} from '../utils/googleAuth.js';
+import { randomBytes } from 'node:crypto';
 
 const setupResponseSession = (
   res,
@@ -119,5 +125,44 @@ export const resetPasswordController = async (req, res) => {
     status: 200,
     message: 'Password was successfully reset!',
     data: {},
+  });
+};
+
+export const getGoogleAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Google Auth url generate successfully',
+    data: {
+      url,
+    },
+  });
+};
+
+export const authGoogleController = async (req, res) => {
+  const { code } = req.body;
+  const payload = await validateGoogleAuthCode(code);
+  const userPayload = payload.getPayload();
+  if (userPayload) {
+    throw createHttpError(401);
+  }
+  let user = await findUser({
+    email: userPayload.email,
+  });
+  if (!user) {
+    const signupData = {
+      email: userPayload.email,
+      password: randomBytes(10),
+      name: getGoogleAuthName(userPayload),
+    };
+    user = await registerUser(signupData);
+  }
+  const newSession = await createSession(user.userId);
+
+  setupResponseSession(res, newSession);
+  res.json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: { accessToken: newSession.accessToken },
   });
 };
